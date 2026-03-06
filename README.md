@@ -87,7 +87,6 @@ INSIGHTMATE
 └── README.md
 
 ---
-
 ## System Workflow
 
 1. The user uploads a dataset through the web interface.
@@ -138,7 +137,8 @@ Uses Gemini API to provide explanations and answer questions related to the data
 
 ## Author
 
-Priyanka Gadekar,Dishti Andersahare,Shruti Mishra
-BTech Data Science Students
+Priyanka Gadekar  
+BTech Data Science Student  
 
+Interested in Artificial Intelligence, Data Science, and Data Visualization.
 Interested in Artificial Intelligence, Data Science, and Data Visualization.
