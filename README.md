@@ -137,8 +137,8 @@ Uses Gemini API to provide explanations and answer questions related to the data
 
 ## Author
 
-Priyanka Gadekar  
-BTech Data Science Student  
+Priyanka Gadekar,Dishti Andersahare, Shruti Mishra
+BTech Data Science Students
 
 Interested in Artificial Intelligence, Data Science, and Data Visualization.
 Interested in Artificial Intelligence, Data Science, and Data Visualization.
