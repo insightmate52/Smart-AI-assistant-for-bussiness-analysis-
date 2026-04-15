@@ -1,8 +1,14 @@
 :root {
   --glass: rgba(255, 255, 255, 0.08);
   --glass-strong: rgba(255, 255, 255, 0.15);
+
   --text: #ffffff;
   --muted: #d1d1d1;
+
+  /* 🔥 NEW ACCENT COLORS */
+  --accent-orange: #F97316;
+  --accent-amber: #FB923C;
+  --accent-gold: #FACC15;
 }
 
 /* =========================
@@ -19,21 +25,20 @@ body {
 
   background: linear-gradient(
     135deg,
-    #1c1917,
-    #3f2f25,
-    #a67c52,
-    #e6ccb2
+    #0F172A,
+    #1E1B4B,
+    #1F2937
   );
   min-height: 100vh;
 }
 
-/* 🔥 Brown Glass Overlay */
+/* 🔥 DARK GLASS OVERLAY */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  backdrop-filter: blur(16px);
-  background: rgba(40, 25, 15, 0.6);
+  backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
 
@@ -55,11 +60,9 @@ body::before {
 ========================= */
 .sidebar {
   width: 260px;
-  background: rgba(30, 20, 10, 0.6);
-  backdrop-filter: blur(18px);
+  background: #020617;
   padding: 25px 20px;
   border-radius: 0 25px 25px 0;
-  border-right: 1px solid rgba(255,255,255,0.1);
 }
 
 .sidebar h4 {
@@ -71,7 +74,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: white;
+  color: var(--muted);
   padding: 12px;
   border-radius: 12px;
   text-decoration: none;
@@ -80,8 +83,8 @@ body::before {
 }
 
 .sidebar a:hover {
-  background: rgba(255,255,255,0.15);
-  transform: translateX(5px);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 /* =========================
@@ -90,7 +93,7 @@ body::before {
 .card,
 .card-box {
   background: var(--glass);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(18px);
   border-radius: 22px;
   padding: 22px;
   color: white;
@@ -98,7 +101,7 @@ body::before {
   border: 1px solid rgba(255,255,255,0.1);
 
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.4),
+    0 8px 32px rgba(0,0,0,0.5),
     inset 0 1px 1px rgba(255,255,255,0.1);
 
   margin-bottom: 20px;
@@ -107,7 +110,7 @@ body::before {
 
 .card:hover,
 .card-box:hover {
-  transform: translateY(-3px) scale(1.01);
+  transform: translateY(-4px);
 }
 
 /* =========================
@@ -129,7 +132,7 @@ body::before {
 input,
 select,
 textarea {
-  background: rgba(255,255,255,0.12) !important;
+  background: rgba(255,255,255,0.1) !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
   border-radius: 12px !important;
   color: white !important;
@@ -142,7 +145,7 @@ textarea::placeholder {
 }
 
 /* =========================
-   BUTTONS (GLASS STYLE)
+   BUTTONS (🔥 ORANGE ACCENT)
 ========================= */
 .btn,
 button {
@@ -151,30 +154,33 @@ button {
   font-weight: 500;
 }
 
-/* Glass Button */
+/* MAIN BUTTON */
 .btn-primary,
 .btn-primary-custom {
-  background: rgba(255,255,255,0.15) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: linear-gradient(
+    135deg,
+    var(--accent-orange),
+    var(--accent-amber)
+  ) !important;
+  border: none;
   color: white;
 }
 
+/* 🔥 GLOW EFFECT */
 .btn-primary:hover {
-  background: rgba(255,255,255,0.25) !important;
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
   transform: scale(1.05);
 }
 
-/* Success */
+/* SUCCESS */
 .btn-success {
-  background: rgba(0, 200, 150, 0.6) !important;
-  border: none;
+  background: var(--accent-gold) !important;
+  color: black;
 }
 
-/* Warning */
+/* WARNING */
 .btn-warning {
-  background: rgba(255, 193, 7, 0.7) !important;
-  border: none;
+  background: var(--accent-amber) !important;
 }
 
 /* =========================
@@ -183,22 +189,22 @@ button {
 .table {
   border-radius: 12px;
   overflow: hidden;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
 }
 
 .table thead {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
 }
 
 .table td, .table th {
-  color: white;
+  color: var(--text);
 }
 
 /* =========================
    CHAT UI
 ========================= */
 .chat-box {
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.4);
   border-radius: 15px;
   padding: 15px;
   height: 400px;
@@ -212,12 +218,12 @@ button {
 }
 
 .user-msg {
-  background: rgba(255,255,255,0.15);
+  background: rgba(249, 115, 22, 0.3);
   text-align: right;
 }
 
 .bot-msg {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
 }
 
 .error-msg {
@@ -228,7 +234,7 @@ button {
    CODE OUTPUT
 ========================= */
 pre {
-  background: rgba(0,0,0,0.6);
+  background: #020617;
   color: white;
   border-radius: 12px;
   padding: 15px;
@@ -238,19 +244,14 @@ pre {
    LOGIN PAGE
 ========================= */
 .login-page {
-  background: linear-gradient(135deg, #3f2f25, #a67c52);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  background: linear-gradient(135deg, #0F172A, #1E1B4B);
 }
 
 .login-card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(25px);
+  background: var(--glass);
+  backdrop-filter: blur(20px);
   border-radius: 20px;
   padding: 30px;
-  color: white;
 }
 
 /* =========================
