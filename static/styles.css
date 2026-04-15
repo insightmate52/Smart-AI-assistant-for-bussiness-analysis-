@@ -1,9 +1,13 @@
 :root {
-  --glass: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.2);
 
-  --text: #F9FAFB;
-  --muted: #9CA3AF;
+  --text: #ffffff;
+  --muted: #e5e5e5;
+
+  --brown-main: #5a3e2b;
+  --brown-light: #a67c52;
+  --gold: #d4a373;
 }
 
 /* =========================
@@ -18,32 +22,45 @@ body {
   font-family: "Poppins", system-ui, sans-serif;
   color: var(--text);
 
-  /* 🔥 DARK + BROWN GLOW BACKGROUND */
   background:
     radial-gradient(
       circle at 50% 40%,
-      rgba(166, 124, 82, 0.35),
-      rgba(63, 47, 37, 0.25) 30%,
-      rgba(15, 23, 42, 0.9) 70%
+      rgba(166,124,82,0.6),
+      rgba(166,124,82,0.4) 30%,
+      rgba(90,62,43,0.5) 60%,
+      rgba(15,23,42,0.6) 100%
     ),
     linear-gradient(
       135deg,
-      #020617,
-      #0F172A,
-      #1E1B4B
+      #3f2f25,
+      #5a3e2b,
+      #a67c52
     );
 
   min-height: 100vh;
 }
 
-/* Soft blur overlay */
+/* Overlay */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  backdrop-filter: blur(12px);
-  background: rgba(0, 0, 0, 0.4);
+
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.25);
+
   z-index: -1;
+}
+
+/* =========================
+   FORCE TEXT WHITE
+========================= */
+body, p, span, div, label, li {
+  color: #ffffff !important;
+}
+
+h1, h2, h3, h4, h5 {
+  color: #ffffff !important;
 }
 
 /* =========================
@@ -51,7 +68,6 @@ body::before {
 ========================= */
 .app-wrapper {
   display: flex;
-  min-height: 100vh;
 }
 
 .main-content {
@@ -64,67 +80,77 @@ body::before {
 ========================= */
 .sidebar {
   width: 260px;
-  background: #020617;
-  padding: 25px 20px;
-  border-radius: 0 25px 25px 0;
-}
+  background: rgba(40, 25, 15, 0.85);
 
-.sidebar h4 {
-  color: white;
-  margin-bottom: 25px;
+  backdrop-filter: blur(15px);
+
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0 25px 25px 0;
+
+  padding: 25px 20px;
 }
 
 .sidebar a {
   display: flex;
-  align-items: center;
   gap: 10px;
   color: var(--muted);
+
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 10px;
+
   text-decoration: none;
   transition: 0.3s;
 }
 
 .sidebar a:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.15);
   color: white;
 }
 
 /* =========================
-   CARDS (GLASS)
+   CARDS
 ========================= */
 .card,
 .card-box {
-  background: var(--glass);
+  background: var(--glass) !important;
   backdrop-filter: blur(18px);
 
-  border-radius: 18px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 22px;
 
   border: 1px solid var(--glass-border);
 
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.5),
-    inset 0 1px 1px rgba(255,255,255,0.05);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
+  margin-bottom: 20px;
 }
 
 /* =========================
-   TEXT
+   FIX INSIGHT LIST
 ========================= */
-.page-title {
-  font-size: 1.6rem;
-  font-weight: 600;
+.list-group {
+  background: transparent !important;
 }
 
-.page-subtitle {
-  color: var(--muted);
-  margin-bottom: 20px;
+.list-group-item {
+  background: rgba(255,255,255,0.12) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* =========================
+   FIX GRAPH IMAGES
+========================= */
+img {
+  background: transparent !important;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+/* Remove white graph box */
+.card img {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 /* =========================
@@ -133,113 +159,83 @@ body::before {
 input,
 select,
 textarea {
-  background: rgba(255,255,255,0.08) !important;
-  border: 1px solid var(--glass-border) !important;
+  background: rgba(255,255,255,0.2) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+
   border-radius: 10px !important;
   color: white !important;
   padding: 10px;
 }
 
 input::placeholder {
-  color: var(--muted);
+  color: #f1f1f1;
 }
 
 /* =========================
-   BUTTONS (GLASS STYLE)
+   BUTTONS
 ========================= */
-.btn,
-button {
-  border-radius: 30px;
-  transition: 0.3s;
-}
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--brown-main),
+    var(--brown-light)
+  ) !important;
 
-/* 🔥 CLEAN GLASS BUTTON */
-.btn-primary,
-.btn-primary-custom {
-  background: rgba(255,255,255,0.12) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
+  border: none;
   color: white;
 }
 
 .btn-primary:hover {
-  background: rgba(255,255,255,0.2) !important;
-  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(166,124,82,0.7);
+}
+
+/* =========================
+   BADGE FIX
+========================= */
+.badge,
+.insight-tag {
+  background: rgba(166,124,82,0.9) !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+/* =========================
+   SEVERITY TAG
+========================= */
+.severity {
+  background: rgba(166,124,82,0.9)  !important;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+/* =========================
+   CHAT
+========================= */
+.chat-box {
+  background: rgba(0,0,0,0.25);
+}
+
+.user-msg {
+  background: rgba(166,124,82,0.35);
+}
+
+.bot-msg {
+  background: rgba(255,255,255,0.15);
 }
 
 /* =========================
    TABLE
 ========================= */
 .table {
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.12);
 }
 
 .table thead {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.2);
 }
 
 .table td, .table th {
-  color: white;
-}
-
-/* =========================
-   CHAT UI
-========================= */
-.chat-box {
-  background: rgba(0,0,0,0.35);
-  border-radius: 12px;
-  padding: 15px;
-  height: 400px;
-  overflow-y: auto;
-}
-
-.chat-msg {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.user-msg {
-  background: rgba(255,255,255,0.12);
-  text-align: right;
-}
-
-.bot-msg {
-  background: rgba(255,255,255,0.08);
-}
-
-/* =========================
-   CODE
-========================= */
-pre {
-  background: #020617;
-  color: white;
-  border-radius: 10px;
-  padding: 15px;
-}
-
-/* =========================
-   LOGIN PAGE
-========================= */
-.login-page {
-  background: linear-gradient(135deg, #020617, #1E1B4B);
-}
-
-.login-card {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 30px;
-}
-
-/* =========================
-   ALERTS
-========================= */
-.alert {
-  background: rgba(255,255,255,0.15);
-  border: none;
   color: white;
 }
 
@@ -251,6 +247,6 @@ pre {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.4);
   border-radius: 10px;
 }
