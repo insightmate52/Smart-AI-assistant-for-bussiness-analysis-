@@ -250,3 +250,38 @@ input::placeholder {
   background: rgba(255,255,255,0.4);
   border-radius: 10px;
 }
+/* =========================
+   DROPDOWN FIX (IMPORTANT)
+========================= */
+
+/* Select box */
+select {
+  color: black !important;
+  background: rgba(255,255,255,0.9) !important;
+}
+
+/* Dropdown options */
+select option {
+  color: black !important;
+  background: white !important;
+}
+
+/* Focus state */
+select:focus {
+  color: black !important;
+  background: white !important;
+}
+
+/* For Bootstrap dropdown menu */
+.dropdown-menu {
+  background: white !important;
+}
+
+.dropdown-item {
+  color: black !important;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6 !important;
+  color: black !important;
+}
