@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3>Manual Insights</h3>
+
+<!-- Graph Type -->
+<select id="graphType" class="form-control mb-2">
+  <option value="bar">Bar</option>
+  <option value="line">Line</option>
+  <option value="scatter">Scatter</option>
+</select>
+
+<!-- X Axis -->
+<select id="xAxis" class="form-control mb-2">
+  {% for col in (dataset_summary.columns if dataset_summary and dataset_summary.columns else []) %}
+    <option value="{{ col }}">{{ col }}</option>
+  {% endfor %}
+</select>
+
+<!-- Y Axis -->
+<select id="yAxis" class="form-control mb-2">
+  {% for col in (dataset_summary.columns if dataset_summary and dataset_summary.columns else []) %}
+    <option value="{{ col }}">{{ col }}</option>
+  {% endfor %}
+</select>
+
+<button onclick="generateGraph()" class="btn btn-success">Generate</button>
+
+<img id="graph" class="img-fluid mt-3">
+
+<hr>
+
+<!-- Chat -->
+<input id="question" class="form-control" placeholder="Ask about graph">
+<button onclick="ask()" class="btn btn-primary mt-2">Ask</button>
+<div id="response"></div>
+
+<script>
+function generateGraph(){
+  fetch("/generate_graph",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      graph_type:document.getElementById("graphType").value,
+      x_axis:document.getElementById("xAxis").value,
+      y_axis:document.getElementById("yAxis").value
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.image_url){
+      document.getElementById("graph").src="/"+d.image_url;
+    } else {
+      alert("Graph generation failed");
+    }
+  })
+  .catch(()=>alert("Error generating graph"));
+}
+
+function ask(){
+  fetch("/chat/ask",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:document.getElementById("question").value})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("response").innerText = d.answer || "No response";
+  })
+  .catch(()=>alert("Chat error"));
+}
+</script>
+
+<a href="/insights" class="btn btn-secondary mt-4">Back</a>
+
+{% endblock %}

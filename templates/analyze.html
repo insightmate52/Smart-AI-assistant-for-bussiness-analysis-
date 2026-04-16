@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+
+  <div class="col-md-3">
+    <div class="card p-3">
+      <h5>Navigation</h5>
+      <a href="/insights" class="btn btn-outline-primary mb-2">Insights</a>
+      <a href="/chat" class="btn btn-outline-primary mb-2">Chat</a>
+      <a href="/estimate" class="btn btn-outline-primary mb-2">Estimation</a>
+      <a href="/logout" class="btn btn-danger mt-3">Logout</a>
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <h3>Dataset Summary</h3>
+
+    <div class="card p-3">
+      <p><b>Filename:</b> {{ dataset_info.filename }}</p>
+      <p><b>Rows:</b> {{ dataset_info.rows }}</p>
+      <p><b>Columns:</b> {{ dataset_info.columns }}</p>
+      <p><b>Uploaded At:</b> {{ dataset_info.uploaded_at }}</p>
+    </div>
+
+    <a href="/upload_page" class="btn btn-secondary mt-3">Back</a>
+  </div>
+
+</div>
+
+{% endblock %}

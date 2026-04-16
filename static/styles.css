@@ -1,242 +1,252 @@
+/* =========================
+   ROOT THEME
+========================= */
 :root {
-  --glass: rgba(255, 255, 255, 0.15);
+  --glass: rgba(255, 255, 255, 0.08);
   --glass-border: rgba(255, 255, 255, 0.2);
 
   --text: #ffffff;
-  --muted: #e5e5e5;
+  --muted: #dcdcdc;
 
   --brown-main: #5a3e2b;
   --brown-light: #a67c52;
-  --gold: #d4a373;
+
+  --gold: #ffd27f;
 }
 
 /* =========================
-   GLOBAL
+   GLOBAL RESET
 ========================= */
 * {
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
-  font-family: "Poppins", system-ui, sans-serif;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
   color: var(--text);
-
-  background:
-    radial-gradient(
-      circle at 50% 40%,
-      rgba(166,124,82,0.6),
-      rgba(166,124,82,0.4) 30%,
-      rgba(90,62,43,0.5) 60%,
-      rgba(15,23,42,0.6) 100%
-    ),
-    linear-gradient(
-      135deg,
-      #3f2f25,
-      #5a3e2b,
-      #a67c52
-    );
-
-  min-height: 100vh;
 }
 
-/* Overlay */
+/* =========================
+   BACKGROUND SYSTEM (FIXED)
+========================= */
+
+/* HOME PAGE */
+.home-page {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+
+  background: url("/static/insightmate.png") no-repeat center top;
+  background-size: cover;
+}
+/* OTHER PAGES */
+body:not(.home-page) {
+  background: url("/static/app_bg.png") no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* OVERLAY (FIXED LIGHTER + PROPER LAYERING) */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
 
-  backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.35); /* lighter so image visible */
+  backdrop-filter: blur(3px);
 
-  z-index: -1;
+  z-index: -1; /* FIX: push behind everything */
 }
 
 /* =========================
-   FORCE TEXT WHITE
+   CONTENT LAYER FIX
 ========================= */
-body, p, span, div, label, li {
-  color: #ffffff !important;
-}
-
-h1, h2, h3, h4, h5 {
-  color: #ffffff !important;
+.container, .navbar {
+  position: relative;
+  z-index: 1;
 }
 
 /* =========================
-   LAYOUT
+   TEXT
 ========================= */
-.app-wrapper {
-  display: flex;
-}
-
-.main-content {
-  flex: 1;
-  padding: 30px;
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-.sidebar {
-  width: 260px;
-  background: rgba(40, 25, 15, 0.85);
-
-  backdrop-filter: blur(15px);
-
-  border-right: 1px solid rgba(255,255,255,0.1);
-  border-radius: 0 25px 25px 0;
-
-  padding: 25px 20px;
-}
-
-.sidebar a {
-  display: flex;
-  gap: 10px;
-  color: var(--muted);
-
-  padding: 12px;
-  border-radius: 10px;
-
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  background: rgba(255,255,255,0.15);
+body, p, span, div, label {
   color: white;
 }
 
-/* =========================
-   CARDS
-========================= */
-.card,
-.card-box {
-  background: var(--glass) !important;
-  backdrop-filter: blur(18px);
+h1, h2, h3, h4, h5 {
+  color: var(--gold);
+}
 
-  border-radius: 20px;
-  padding: 22px;
+/* =========================
+   HEADER
+========================= */
+.navbar {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* =========================
+   CARDS (GLASS UI)
+========================= */
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+
+  border-radius: 18px;
+  padding: 20px;
 
   border: 1px solid var(--glass-border);
 
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 
-  margin-bottom: 20px;
+  transition: 0.3s;
 }
 
-/* =========================
-   FIX INSIGHT LIST
-========================= */
-.list-group {
-  background: transparent !important;
-}
-
-.list-group-item {
-  background: rgba(255,255,255,0.12) !important;
-  color: white !important;
-  border: none !important;
-}
-
-/* =========================
-   FIX GRAPH IMAGES
-========================= */
-img {
-  background: transparent !important;
-  border-radius: 12px;
-  padding: 8px;
-}
-
-/* Remove white graph box */
-.card img {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* =========================
-   INPUTS
-========================= */
-input,
-select,
-textarea {
-  background: rgba(255,255,255,0.2) !important;
-  border: 1px solid rgba(255,255,255,0.3) !important;
-
-  border-radius: 10px !important;
-  color: white !important;
-  padding: 10px;
-}
-
-input::placeholder {
-  color: #f1f1f1;
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
 }
 
 /* =========================
    BUTTONS
 ========================= */
-.btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--brown-main),
-    var(--brown-light)
-  ) !important;
-
+.btn {
+  border-radius: 12px;
+  padding: 10px 16px;
   border: none;
   color: white;
 }
 
-.btn-primary:hover {
-  box-shadow: 0 0 12px rgba(166,124,82,0.7);
+.btn-primary {
+  background: linear-gradient(135deg, var(--brown-main), var(--brown-light));
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #e53935, #b71c1c);
 }
 
 /* =========================
-   BADGE FIX
+   INPUTS
 ========================= */
-.badge,
-.insight-tag {
-  background: rgba(166,124,82,0.9) !important;
-  color: white !important;
-  border-radius: 8px;
-}
-
-/* =========================
-   SEVERITY TAG
-========================= */
-.severity {
-  background: rgba(166,124,82,0.9)  !important;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 8px;
-}
-
-/* =========================
-   CHAT
-========================= */
-.chat-box {
-  background: rgba(0,0,0,0.25);
-}
-
-.user-msg {
-  background: rgba(166,124,82,0.35);
-}
-
-.bot-msg {
+input, textarea, select {
   background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+}
+
+input::placeholder {
+  color: #eee;
+}
+
+select option {
+  color: black;
 }
 
 /* =========================
-   TABLE
+   LOGIN PAGE
 ========================= */
-.table {
-  background: rgba(255,255,255,0.12);
+.login-wrapper {
+  min-height: 80vh;
 }
 
-.table thead {
-  background: rgba(255,255,255,0.2);
+.login-card {
+  width: 380px;
+  max-width: 90%;
+  margin: auto;
+
+  padding: 25px;
+  border-radius: 15px;
+
+  background: rgba(0,0,0,0.5); /* FIX: better contrast */
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
-.table td, .table th {
-  color: white;
+/* =========================
+   HOME PAGE CONTENT
+========================= */
+/* CENTER CONTENT PROPERLY */
+.home-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  text-align: center;
+}
+/* TEXT BOX */
+.home-text-box {
+  text-align: center;
+}
+/* Welcome */
+.home-welcome {
+  font-size: 24px;
+  color: var(--gold);
+
+  text-shadow:
+    0 0 6px rgba(255,210,127,0.8),
+    0 0 12px rgba(255,180,80,0.6);
+}
+
+/* TITLE */
+.home-title {
+  font-size: 70px;
+  color: #ffd27f;
+
+  text-shadow:
+    0 0 10px rgba(255,200,100,1),
+    0 0 25px rgba(255,150,50,0.9),
+    0 0 50px rgba(255,120,0,0.8);
+}
+
+
+/* Subtitle */
+.home-subtitle {
+  font-size: 18px;
+  color: var(--gold);
+  margin: 15px 0 30px;
+
+  text-shadow: 0 0 5px rgba(255,200,100,0.5);
+}
+
+/* =========================
+   HOME BUTTON
+========================= */
+.home-btn {
+  display: inline-block;
+
+  padding: 14px 40px;
+  border-radius: 40px;
+
+  text-decoration: none;
+
+  color: var(--gold);
+
+  background: linear-gradient(145deg, #5a3e2b, #3e2a1f);
+
+  border: 2px solid rgba(255,210,120,0.8);
+
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.1),
+    0 0 15px rgba(255,180,80,0.6),
+    0 0 30px rgba(255,150,50,0.5);
+
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  transform: scale(1.07);
+
+  box-shadow:
+    inset 0 0 15px rgba(255,255,255,0.2),
+    0 0 25px rgba(255,200,100,0.9),
+    0 0 50px rgba(255,150,50,0.8);
 }
 
 /* =========================
@@ -250,38 +260,109 @@ input::placeholder {
   background: rgba(255,255,255,0.4);
   border-radius: 10px;
 }
+
 /* =========================
-   DROPDOWN FIX (IMPORTANT)
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .row > div {
+    margin-bottom: 10px;
+  }
+
+  .home-title {
+    font-size: 40px;
+  }
+}
+.container {
+  background: transparent !important;
+}
+html, body {
+  height: 100%;
+}
+
+.home-page {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.home-content {
+  height: 100vh;
+}
+/* CENTER PERFECTLY */
+.home-content {
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  /* 🔥 fix vertical offset */
+  padding: 0;
+  margin: 0;
+}
+
+/* TEXT BLOCK */
+.home-text-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  /* 🔥 remove weird upward shift */
+  transform: none;
+}
+
+/* TITLE spacing improve */
+.home-title {
+  margin: 10px 0;
+}
+
+/* SUBTITLE spacing */
+.home-subtitle {
+  margin: 10px 0 25px;
+}
+
+/* BUTTON CENTER FIX */
+.home-btn {
+  margin-top: 10px;
+}
+/* =========================
+   HEADER SIZE INCREASE
 ========================= */
 
-/* Select box */
-select {
-  color: black !important;
-  background: rgba(255,255,255,0.9) !important;
+.custom-navbar {
+  padding: 18px 30px !important;   /* 🔥 increases height */
 }
 
-/* Dropdown options */
-select option {
-  color: black !important;
-  background: white !important;
+/* Logo bigger */
+.custom-navbar img {
+  width: 50px;   /* was 35 */
 }
 
-/* Focus state */
-select:focus {
-  color: black !important;
-  background: white !important;
+/* Title bigger */
+.custom-navbar h5 {
+  font-size: 24px;   /* bigger text */
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+/* =========================
+   TEXTUAL INSIGHTS FIX
+========================= */
+
+/* Force white text inside cards */
+.card,
+.card * {
+  color: white !important;
 }
 
-/* For Bootstrap dropdown menu */
-.dropdown-menu {
-  background: white !important;
-}
-
-.dropdown-item {
-  color: black !important;
-}
-
-.dropdown-item:hover {
-  background: #f3f4f6 !important;
-  color: black !important;
+/* Specifically for textual insights blocks */
+.textual-insight,
+.textual-insight * {
+  color: white !important;
 }

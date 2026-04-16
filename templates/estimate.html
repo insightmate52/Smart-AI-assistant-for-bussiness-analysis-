@@ -1,72 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="card-box">
-  <div class="page-title">📈 Future Value Estimation</div>
-  <div class="page-subtitle">
-    Estimate future values based on historical patterns in your dataset
-  </div>
+<h3>Estimation</h3>
 
-  <!-- TARGET -->
-  <label class="fw-semibold mb-1">Target Variable</label>
-  <select id="targetCol" class="form-select mb-3">
-    {% for col in dataset_summary.columns %}
-      <option value="{{ col }}">{{ col }}</option>
-    {% endfor %}
-  </select>
+<select id="targetCol" class="form-control mb-3">
+  {% for col in dataset_summary.columns %}
+    <option value="{{ col }}">{{ col }}</option>
+  {% endfor %}
+</select>
 
-  <!-- TRAIN -->
-  <button class="btn btn-warning-custom w-100 mb-4" onclick="trainModel()">
-    🧠 Train Estimation Model
-  </button>
+<button onclick="trainModel()" class="btn btn-warning mb-3">Train Model</button>
 
-  <!-- HORIZON -->
-  <label class="fw-semibold mb-1">Prediction Window</label>
-  <input id="horizon" type="number" value="3" min="1" class="form-control mb-2">
-  <div class="text-muted small mb-3">
-    Example: 3 = summarize next 3 future values
-  </div>
+<input id="horizon" type="number" value="3" class="form-control mb-2">
 
-  <!-- RUN -->
-  <button class="btn btn-success-custom w-100" onclick="runEstimation()">
-    ▶ Run Estimation
-  </button>
-</div>
+<button onclick="runEstimation()" class="btn btn-success">Run</button>
 
-<div class="card-box">
-  <div class="page-title">📊 Estimation Result</div>
-  <pre id="forecastOutput" class="mt-3">
-Train the model and run estimation to see results here.
-  </pre>
-</div>
+<pre id="output"></pre>
 
 <script>
-async function trainModel() {
-  const target = document.getElementById("targetCol").value;
-  const res = await fetch("/train_forecast", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ target })
-  });
-  const data = await res.json();
-  alert(data.status || data.error);
+async function trainModel(){
+  const target=document.getElementById("targetCol").value;
+  const res=await fetch("/train_forecast",{method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({target})});
+  const data=await res.json();
+  alert(data.status||data.error);
 }
 
-async function runEstimation() {
-  const horizon = Number(document.getElementById("horizon").value);
-  const res = await fetch("/forecast", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ horizon })
-  });
-  const data = await res.json();
-  document.getElementById("forecastOutput").textContent =
-    JSON.stringify(data, null, 2);
+async function runEstimation(){
+  const h=Number(document.getElementById("horizon").value);
+  const res=await fetch("/forecast",{method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({horizon:h})});
+  const data=await res.json();
+  document.getElementById("output").textContent=JSON.stringify(data,null,2);
 }
 </script>
 
+<a href="/download_full_report" class="btn btn-danger mt-3">Generate Full Report</a>
+<a href="/upload_page" class="btn btn-secondary mt-2">Back to Home</a>
+
 {% endblock %}
-
-
-
-

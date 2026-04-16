@@ -1,115 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-header mb-3">
-  <h4>💬 Data Chat Assistant</h4>
-  <p class="text-muted mb-0">
-    Ask questions about insights, trends, or estimation results
-  </p>
-</div>
+<h3>Chat Assistant</h3>
 
-<div class="card chat-card">
-  <div id="chat-box" class="chat-box">
-    <div class="chat-hint">
-      Try asking:
-      <ul>
-        <li>Explain the insights</li>
-        <li>How many rows are there?</li>
-        <li>Estimate next year's profit</li>
-      </ul>
-    </div>
-  </div>
+<div id="chat-box" class="mb-3"></div>
 
-  <form id="chat-form" class="chat-input-area">
-    <input
-      id="chat-input"
-      type="text"
-      class="form-control"
-      placeholder="Type your question here…"
-      required
-    >
-    <button class="btn btn-primary" type="submit">
-      Send
-    </button>
-  </form>
-</div>
-
-{% if history %}
-    {% for item in history %}
-        <div class="chat-entry">
-            <p><b>You:</b> {{ item.question }}</p>
-            <p><b>INSIGHTMATE:</b> {{ item.answer }}</p>
-            <hr>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>No chat history yet.</p>
-{% endif %}
+<input id="chat-input" class="form-control" placeholder="Ask something">
+<button onclick="send()" class="btn btn-primary mt-2">Send</button>
 
 <script>
-  const chatForm = document.getElementById("chat-form");
-  const chatInput = document.getElementById("chat-input");
-  const chatBox = document.getElementById("chat-box");
+function send(){
+  let q=document.getElementById("chat-input").value;
 
-  chatForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const question = chatInput.value.trim();
-    if (!question) return;
-
-    // Show user message
-    chatBox.innerHTML += `
-      <div class="chat-msg user-msg">
-        <strong>You</strong><br>${question}
-      </div>
-    `;
-
-    chatInput.value = "";
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    try {
-      const response = await fetch("/chat/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: question   // ✅ FIXED KEY
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        chatBox.innerHTML += `
-          <div class="chat-msg bot-msg">
-            <strong>Assistant</strong><br>${data.answer}
-          </div>
-        `;
-      } else {
-        chatBox.innerHTML += `
-          <div class="chat-msg error-msg">
-            ${data.error || "Something went wrong."}
-          </div>
-        `;
-      }
-
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-    } catch (err) {
-      chatBox.innerHTML += `
-        <div class="chat-msg error-msg">
-          Error contacting assistant.
-        </div>
-      `;
-
-      
-    }
+  fetch("/chat/ask",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:q})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("chat-box").innerHTML+=
+      "<p><b>You:</b>"+q+"</p><p><b>AI:</b>"+d.answer+"</p>";
   });
+}
 </script>
 
+<a href="/upload_page" class="btn btn-secondary mt-4">Back to Home</a>
+
 {% endblock %}
-
-
-
-

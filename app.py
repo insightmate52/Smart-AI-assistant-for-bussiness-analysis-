@@ -58,6 +58,13 @@ insight_engine = InsightEngine(ml_pipeline)
 
 # Forecast models (per user)
 FORECAST_MODELS = {}
+# ===========================
+# 🏠 home
+# ===========================
+
+@app.route("/")
+def home():
+    return render_template("home.html")
 
 # ===========================
 # 🏠 ROOT
@@ -189,6 +196,19 @@ def upload_page():
         user_email=session.get("user_email")
     )
 
+# ===========================
+# 📊 ANALYZE PAGE  
+# ===========================
+
+@app.route("/analyze")
+def analyze_page():
+    if "dataset_info" not in session:
+        return redirect(url_for("upload_page"))
+
+    return render_template(
+        "analyze.html",
+        dataset_info=session.get("dataset_info")
+    )
 # ===========================
 # 📄 report download 
 # ===========================
@@ -406,12 +426,57 @@ def insights_page():
     if "dataset_summary" not in session:
         return redirect(url_for("upload_page"))
 
+    return render_template("insights.html")
+
+# ===========================
+# visual insights
+# ===========================
+@app.route("/visual_insights")
+def visual_insights_page():
+    if not session.get("dataset_summary"):
+        flash("Upload dataset first", "warning")
+        return redirect(url_for("upload_page"))
+
     return render_template(
-    "insights.html",
-    dataset_summary=session.get("dataset_summary"),
-    insight_visuals=session.get("insight_visuals"),
-    red_flag_visuals=session.get("red_flag_visuals")  # 👈 REQUIRED
-)
+        "visual_insights.html",
+        insight_visuals=session.get("insight_visuals") or [],
+        red_flag_visuals=session.get("red_flag_visuals") or []
+    )
+
+
+# ===========================
+# textual insights
+# ===========================
+@app.route("/textual_insights")
+def textual_insights_page():
+    if not session.get("dataset_summary"):
+        flash("Upload dataset first", "warning")
+        return redirect(url_for("upload_page"))
+
+    return render_template(
+        "textual_insights.html",
+        dataset_summary=session.get("dataset_summary") or {
+            "text_insights": []
+        }
+    )
+
+
+# ===========================
+# manual insights
+# ===========================
+@app.route("/manual_insights")
+def manual_insights_page():
+    if not session.get("dataset_summary"):
+        flash("Upload dataset first", "warning")
+        return redirect(url_for("upload_page"))
+
+    return render_template(
+        "manual_insights.html",
+        dataset_summary=session.get("dataset_summary") or {
+            "columns": []
+        }
+    )
+
 # ===========================
 # 💬 CHAT PAGE  ✅ FIXED ROUTE
 # ===========================
