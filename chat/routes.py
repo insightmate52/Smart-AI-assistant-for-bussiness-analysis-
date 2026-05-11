@@ -84,6 +84,9 @@ def chat_api():
     user_question = data["message"]
     context = data.get("context")
     lower_q = user_question.lower()
+    selected_insight = data.get("selected_insight")
+    print("RAW SELECTED:", selected_insight)
+    print("TYPE:", type(selected_insight))
 
     # ===========================
     # 🔹 LOAD DATASET
@@ -102,6 +105,21 @@ def chat_api():
     }
 
     dataset_context = build_dataset_context(df)
+    selected_context = ""
+    explanation = ""
+    severity = ""
+    image = ""
+    if selected_insight:
+        explanation = selected_insight.get("explanation", "")
+        severity = selected_insight.get("severity", "")
+        image = selected_insight.get("image", "")
+
+    selected_context = f"""
+    SELECTED VISUAL INSIGHT:
+    Explanation: {explanation}
+    Severity Score: {severity}
+    Image Reference: {image}
+    """
 
     # ===========================
     # 🔥 INSIGHTS PAGE MODE
@@ -122,75 +140,122 @@ def chat_api():
         ])
 
         explanation_prompt = f"""
-You are an expert data analyst.
+You are an expert business analyst.
 
-{dataset_context}
-
-INSIGHT SUMMARY:
-{visual_text}
-
-RED FLAGS:
-{red_flag_text}
+{selected_context}
 
 User Question:
 {user_question}
 
 Instructions:
-- Explain using both dataset and insights
-- Mention risk or trend if relevant
-- Be clear and specific
-- 2–4 lines only
+- Answer ONLY using the selected visual insight
+- Do NOT discuss unrelated insights
+- Focus mainly on the selected insight
+- Explain the business risk clearly
+- Mention severity if relevant
+- Keep answer concise
+- No code
+"""
+        answer = ask_gemini(explanation_prompt)
+        return jsonify({"answer": answer})
+   # ===========================
+# 📝 TEXTUAL INSIGHT MODE
+# ===========================
+
+    if context == "textual_insight":
+        insight_text = ""
+        if isinstance(selected_insight, dict):
+            insight_text = selected_insight.get("insight", "")
+
+        explanation_prompt = f"""
+You are an expert business analyst.
+
+Selected Textual Insight:
+{insight_text}
+
+User Question:
+{user_question}
+
+Instructions:
+- Explain ONLY the selected textual insight
+- Mention business impact or meaning
+- Keep answer concise
+- No code
+"""
+        answer = ask_gemini(explanation_prompt)
+        return jsonify({"answer": answer})
+# ===========================
+# 📊 MANUAL GRAPH MODE
+# ===========================
+
+    if context == "manual_graph":
+        graph_type = ""
+    x_axis = ""
+    y_axis = ""
+
+    if isinstance(selected_insight, dict):
+
+        graph_type = selected_insight.get("graph_type", "")
+        x_axis = selected_insight.get("x_axis", "")
+        y_axis = selected_insight.get("y_axis", "")
+
+    explanation_prompt = f"""
+You are an expert data visualization analyst.
+
+Selected Graph:
+- Graph Type: {graph_type}
+- X-Axis: {x_axis}
+- Y-Axis: {y_axis}
+
+User Question:
+{user_question}
+
+Instructions:
+- Explain ONLY the selected graph
+- Mention patterns, trends, or relationships
+- Keep answer concise
 - No code
 """
 
-        answer = ask_gemini(explanation_prompt) or "Insight indicates variability or dominance patterns affecting performance."
-
-        return jsonify({"answer": answer})
+    answer = ask_gemini(explanation_prompt)
 
     # ===========================
     # 🔹 DETECT ANALYTICAL QUERY
     # ===========================
 
-    analysis_keywords = [
+    ANALYSIS_KEYWORDS = [
         "total", "sum", "average", "mean", "max", "min",
         "count", "how many", "forecast", "predict",
         "compare", "growth", "trend",
         "highest", "lowest", "top", "bottom",
         "percentage", "distribution"
     ]
-
-    is_analytical = any(word in lower_q for word in analysis_keywords)
-
-    # ===========================
-    # 🧠 EXPLANATION MODE
-    # ===========================
+    is_analytical = any(word in lower_q for word in ANALYSIS_KEYWORDS)
 
     if not is_analytical:
-
         prompt = f"""
 You are a smart business data analyst.
 
 {dataset_context}
 
+{selected_context}
+
 User Question:
 {user_question}
 
 Instructions:
-- Answer using dataset
-- Give insights, not generic answer
-- Mention values if possible
-- 2–4 lines
+- Use selected insight if provided
+- Answer using dataset context
+- Mention trends or severity if relevant
+- 2-4 lines
 - No code
 """
-
-        answer = ask_gemini(prompt) or "This reflects trends or performance differences within the dataset."
-
+        answer = ask_gemini(prompt)
         return jsonify({"answer": answer})
 
     # ===========================
     # 🔬 ANALYTICAL MODE (CODE GEN)
     # ===========================
-
     planning_prompt = f"""
 You are a Python data analyst.
 
@@ -265,9 +330,8 @@ Explain:
 - Why it matters
 - Give insight
 
-Keep it short (2–3 lines).
+Keep it short (4-5 lines).
 """
 
     final_answer = ask_gemini(explanation_prompt) or f"The result is {result_text}"
-
     return jsonify({"answer": final_answer})

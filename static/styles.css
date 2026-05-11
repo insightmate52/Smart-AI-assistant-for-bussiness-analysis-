@@ -366,3 +366,17 @@ html, body {
 .textual-insight * {
   color: white !important;
 }
+.insight-card{
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.insight-card:hover{
+    transform:translateY(-5px) scale(1.02);
+}
+
+.selected-card{
+    border:2px solid #00ffd5 !important;
+    box-shadow:0 0 20px rgba(0,255,213,0.6);
+    transform:scale(1.03);
+}

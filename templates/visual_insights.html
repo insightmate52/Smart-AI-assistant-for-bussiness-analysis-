@@ -11,7 +11,11 @@
 
     <div class="col-md-4 mb-3">
 
-      <div class="card p-2 h-100">
+      <div class="card p-2 h-100 insight-card"
+      onclick="selectInsight(this)"
+      data-explanation="{{ v.explanation }}"
+      data-severity="{{ v.severity }}"
+      data-image="{{ v.image }}">
 
         {% if v.image %}
           <img src="{{ url_for('static', filename='insights/' ~ v.image) }}"
@@ -72,5 +76,54 @@ function ask(){
 </script>
 
 <a href="/insights" class="btn btn-secondary mt-4">Back</a>
+
+<script>
+
+let selectedInsight = null;
+
+function selectInsight(card){
+
+    document.querySelectorAll(".insight-card").forEach(c=>{
+        c.classList.remove("selected-card");
+    });
+
+    card.classList.add("selected-card");
+
+    selectedInsight = {
+        explanation: card.dataset.explanation,
+        severity: card.dataset.severity,
+        image: card.dataset.image
+    };
+
+    console.log("Selected:", selectedInsight);
+}
+
+function ask(){
+
+  const q = document.getElementById("question").value;
+
+  console.log("Sending:", selectedInsight);
+
+  fetch("/chat/ask", {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+        message:q,
+        context:"insights_page",
+        selected_insight:selectedInsight
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    console.log(d);
+
+    document.getElementById("response").innerText =
+      d.answer || "No response";
+  });
+}
+
+</script>
 
 {% endblock %}

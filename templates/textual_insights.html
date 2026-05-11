@@ -6,9 +6,13 @@
 {% if dataset_summary and dataset_summary.text_insights %}
   
   {% for i in dataset_summary.text_insights %}
-    <div class="card p-3 mb-3">
-      {{ i }}
-    </div>
+  <div class="card p-3 mb-3 insight-card"
+     onclick="selectTextInsight(this)"
+     data-insight="{{ i }}">
+
+  {{ i }}
+
+</div>
   {% endfor %}
 
 {% else %}
@@ -50,6 +54,48 @@ function ask(){
     document.getElementById("response").innerText = "Error contacting assistant";
   });
 }
+</script>
+
+<script>
+
+let selectedInsight = null;
+
+function selectTextInsight(card){
+
+    document.querySelectorAll(".insight-card").forEach(c=>{
+        c.classList.remove("selected-card");
+    });
+
+    card.classList.add("selected-card");
+
+    selectedInsight = {
+        type: "textual",
+        insight: card.dataset.insight
+    };
+
+    console.log(selectedInsight);
+}
+
+function ask(){
+
+  const q = document.getElementById("question").value;
+
+  fetch("/chat/ask", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+        message:q,
+        context:"textual_insight",
+        selected_insight:selectedInsight
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("response").innerText =
+      d.answer || "No response";
+  });
+}
+
 </script>
 
 <a href="/insights" class="btn btn-secondary mt-4">Back</a>
